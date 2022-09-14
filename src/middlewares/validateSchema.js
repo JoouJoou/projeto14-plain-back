@@ -1,7 +1,7 @@
 export function validateSchema(schema) {
   return (req, res, next) => {
     const { error } = schema.validate(req.body, {
-      abortEarly: true,
+      abortEarly: false,
     });
 
     if (error) {
