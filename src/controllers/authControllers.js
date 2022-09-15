@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-
+import { v4 as uuid } from "uuid";
 import { db } from "../database/db.js";
 
 const signUp = async (req, res) => {
@@ -27,4 +27,31 @@ const signUp = async (req, res) => {
   }
 };
 
-export { signUp };
+const signIn = async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const user = await db.collection("users").findOne({ email });
+
+    if (!user) {
+      return res.status(422).send("Email não cadastrado");
+    }
+
+    const senhaCorreta = bcrypt.compareSync(password, user.password);
+    if (!senhaCorreta) {
+      return res.status(422).send("Email ou senha incorretos");
+    }
+    const token = uuid();
+
+    await db.collection("sessions").insertOne({ token, userId: user._id });
+
+    delete user.password;
+    delete user._id;
+
+    return res.send({ token, user });
+  } catch (e) {
+    return res.status(500).send(e);
+  }
+};
+
+export { signUp, signIn };
