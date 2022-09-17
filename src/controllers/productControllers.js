@@ -35,3 +35,8 @@ export async function getProductsPerId(req, res) {
     return res.sendStatus(500);
   }
 }
+
+export async function removeAll(req, res) {
+  await db.collection("storage").remove({});
+  res.send(200);
+}

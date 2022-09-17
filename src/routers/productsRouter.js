@@ -5,6 +5,7 @@ import {
   insertProduct,
   getProducts,
   getProductsPerId,
+  removeAll,
 } from "../controllers/productControllers.js";
 
 const productsRouter = Router();
@@ -17,5 +18,6 @@ productsRouter.post(
 
 productsRouter.get("/products", getProducts);
 productsRouter.get("/products/:id", getProductsPerId);
+productsRouter.delete("/products", removeAll);
 
 export default productsRouter;
