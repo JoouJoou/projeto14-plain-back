@@ -54,4 +54,26 @@ const signIn = async (req, res) => {
   }
 };
 
-export { signUp, signIn };
+const updateUser = async (req, res) => {
+  try {
+    const element = req.body;
+    console.log(req.headers);
+    const user = await db.collection("users").findOne({ email: element.email });
+    if (!user) {
+      return res.sendStatus(404);
+    }
+    const userEmail = element.email;
+    delete element.email;
+    await db.collection("users").updateOne(
+      {
+        email: userEmail,
+      },
+      { $set: element }
+    );
+    return res.sendStatus(200);
+  } catch {
+    return res.status(500).send(e);
+  }
+};
+
+export { signUp, signIn, updateUser };
