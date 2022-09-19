@@ -57,7 +57,6 @@ const signIn = async (req, res) => {
 const updateUser = async (req, res) => {
   try {
     const element = req.body;
-    console.log(req.headers);
     const user = await db.collection("users").findOne({ email: element.email });
     if (!user) {
       return res.sendStatus(404);

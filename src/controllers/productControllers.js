@@ -40,3 +40,26 @@ export async function removeAll(req, res) {
   await db.collection("storage").remove({});
   res.send(200);
 }
+
+export async function updateProduct(req, res) {
+  try {
+    const element = req.body;
+    const product = await db
+      .collection("storage")
+      .findOne({ name: element.name });
+    if (!product) {
+      return res.sendStatus(404);
+    }
+    const productEmail = element.name;
+    delete element.email;
+    await db.collection("storage").updateOne(
+      {
+        name: productEmail,
+      },
+      { $set: element }
+    );
+    return res.sendStatus(200);
+  } catch {
+    res.sendStatus(500);
+  }
+}
